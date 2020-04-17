@@ -2,20 +2,27 @@ from PIL import Image, ImageDraw
 from selenium import webdriver
 import os
 import sys
+import time 
 
 class ScreenAnalysis:
 
-    CHROME_URL = 'https://www.uni-miskolc.hu/'
-    FIREFOX_URL = 'https://www.uni-miskolc.hu/'
+    CHROME_URL = 'https://www.hvg.hu/'
+    FIREFOX_URL = 'https://www.hvg.hu/'
     ChromeDriver = None
     FirefoxDriver = None
 
     def __init__(self):
+        startall = time.time()
         os.makedirs('./screenshots', exist_ok=True)
         self.set_up()
+        startcap = time.time()
         self.capture_screens() # Comment for manual use
+        print ('Capture - ', time.time()- startcap)
+        startan = time.time()
         self.analyze()
+        print ('Analyze - ', time.time()- startan)
         self.clean_up()
+        print ('All - ', time.time()- startall)
 
     def set_up(self):
         # Chrome
@@ -38,19 +45,20 @@ class ScreenAnalysis:
         self.screenshot(self.FIREFOX_URL, 'screenshot_firefox.png', 'firefox')
 
     def screenshot(self, url, file_name, driver_type):
+        path = os.path.join('./', 'screenshots', file_name)
         if (driver_type == 'chrome'):
             print("Capturing", url, "screenshot as", file_name, "with chrome...")
             self.ChromeDriver.get(url)
-            self.ChromeDriver.set_window_size(1920, 1080)
-            self.ChromeDriver.save_screenshot(os.path.join('./', 'screenshots', file_name))
-            self.ChromeDriver.get_screenshot_as_png()
+            height = self.ChromeDriver.execute_script("return document.body.scrollHeight")
+            self.ChromeDriver.set_window_size(1920,height+100)
+            self.ChromeDriver.save_screenshot(path)
             print("Done.")
         elif (driver_type == 'firefox'):
             print("Capturing", url, "screenshot as", file_name, "with firefox ...")
             self.FirefoxDriver.get(url)
-            self.FirefoxDriver.set_window_size(1920, 1080)
-            self.FirefoxDriver.save_screenshot(os.path.join('./', 'screenshots', file_name))
-            self.FirefoxDriver.get_screenshot_as_png()
+            height = self.FirefoxDriver.execute_script("return document.body.scrollHeight")
+            self.FirefoxDriver.set_window_size(1920,height+100)
+            self.FirefoxDriver.save_screenshot(path)
             print("Done.")
         
         
@@ -58,8 +66,8 @@ class ScreenAnalysis:
         print("Analyzing screenshots...")
         screenshot_chrome = Image.open("screenshots/screenshot_chrome.png")
         screenshot_firefox = Image.open("screenshots/screenshot_firefox.png")
-        columns = 60
-        rows = 80
+        columns = 120
+        rows = 160
         screen_width, screen_height = screenshot_chrome.size
 
         block_width = ((screen_width - 1) // columns) + 1 # this is just a division ceiling

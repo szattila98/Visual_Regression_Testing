@@ -11,8 +11,6 @@ This script takes two screenshots with the help of Selenium automation framework
 
 - Change url constants to compare screenshots of the pages you would like to check out.
 
-- Remove 'headless' options in the 'set_up' function to see the magic as it happens.
-
 - To compare custom pictures just put screenshots with the correct name into the 'screenshots' folder and comment the 'capture_screens' function.
 
 ## How it works
