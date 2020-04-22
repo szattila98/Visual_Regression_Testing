@@ -4,10 +4,18 @@ This script takes two screenshots with the help of Selenium automation framework
 
 ## Usage
 
-- It is recommended to activate venv and then install the requirements.
+- After clone, cd into the cloned directory and create a virtualenv, then activate it.
 
-- The script also requires the used browser engines to be installed and added to PATH. <br>
-(If you use chocolatey -> https://chocolatey.org/packages/selenium-all-drivers)
+`virtualenv /venv` <br>
+`./venv/Scripts/activate`
+
+- Install requirements.
+
+`pip install -r requirements.txt`
+
+- The script also requires the used browser driver to be installed and added to PATH. <br>
+If you use chocolatey -> https://chocolatey.org/packages/selenium-all-drivers <br>
+Otherwise install them manually.
 
 - Change url constants to compare screenshots of the pages you would like to check out.
 
